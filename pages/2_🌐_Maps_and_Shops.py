@@ -244,19 +244,24 @@ radius = st.number_input('Введите максимальное расстоя
 df_for_shops_around = temp_df_for_shops_around[temp_df_for_shops_around.gps.apply(
     lambda x: geodesic(x, shop_coord).kilometers <= radius)]
 
-### Chart
+if len(temp_df_for_shops_around):
+    
+    ### Chart
+    
+    st.plotly_chart(map_kazan_sales(df_for_shops_around, 12))
+    
+    ### Table
+    
+    shops_around_df_for_table = df_for_shops_around \
+        .drop(columns=['lat', 'long', 'gps']) \
+        .sort_values('Продажи, руб с НДС', ascending=False)
+    
+    st.write(f'**Список магазинов в радиусе {radius} км в порядке убывания по количеству продаж в рублях\*:**')
+    st.caption('\* если другой порядок не определен пользователем (по щелчку мыши на названии столбца в таблице))')
+    st.dataframe(shops_around_df_for_table.style.format({'Продажи, шт': number_style,
+                                                         'Продажи, руб с НДС': number_style,
+                                                         'Продажи, л': number_style}),
+                 hide_index=True)
 
-st.plotly_chart(map_kazan_sales(df_for_shops_around, 12))
-
-### Table
-
-shops_around_df_for_table = df_for_shops_around \
-    .drop(columns=['lat', 'long', 'gps']) \
-    .sort_values('Продажи, руб с НДС', ascending=False)
-
-st.write(f'**Список магазинов в радиусе {radius} км в порядке убывания по количеству продаж в рублях\*:**')
-st.caption('\* если другой порядок не определен пользователем (по щелчку мыши на названии столбца в таблице))')
-st.dataframe(shops_around_df_for_table.style.format({'Продажи, шт': number_style,
-                                                     'Продажи, руб с НДС': number_style,
-                                                     'Продажи, л': number_style}),
-             hide_index=True)
+else:
+    st.warning('Данный товар не был продан ни в одном из магазинов г. Казань в январе 2023 года.')
