@@ -221,7 +221,7 @@ col31, col32, col33 = st.columns(3)
 
 with col31:
     product_of_shop = st.selectbox('Выберите продукт:', products_lst, key=5)
-    col_name_of_shop_product = products_dct[product_of_kazan]
+    col_name_of_shop_product = products_dct[product_of_shop]
     temp_df_for_shops_around = dfs_kazan_sales[col_name_of_shop_product]
 
 with col32:
