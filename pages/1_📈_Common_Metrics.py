@@ -9,9 +9,9 @@ st.set_page_config(page_title='Общие метрики по продукту')
 
 # Loading and creating data
 
-met_df = pd.read_csv('df_for_met_and_pie.csv', index_col=0)
-delta_met_df = pd.read_csv('delta_df_for_met_and_pie.csv', index_col=0)
-week_sales = pd.read_csv('week_sales_df.csv', index_col=0)
+met_df = pd.read_csv('./files/df_for_met_and_pie.csv', index_col=0)
+delta_met_df = pd.read_csv('./files/delta_df_for_met_and_pie.csv', index_col=0)
+week_sales = pd.read_csv('./files/week_sales_df.csv', index_col=0)
 
 products_lst = ['Laimon Fresh',
                 'Laimon Fresh Mango',
