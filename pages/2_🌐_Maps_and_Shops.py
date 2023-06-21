@@ -103,14 +103,14 @@ def map_shops_kazan():
 ## Sales of Kazan's shops
 
 
-def map_kazan_sales(df, zoom):
+def map_kazan_sales(df, zoom, metric=None):
     fig = px.scatter_mapbox(df,
                             lat='lat',
                             lon='long',
                             mapbox_style='carto-positron',
                             color='Название сети',
                             zoom=zoom,
-                            size=metric_of_kazan,
+                            size=metric,
                             hover_name=pd.Series(df['Название сети'] + " №" + df['Номер магазина в сети'].astype(str)),
                             hover_data={'Название сети': False,
                                         'lat': False,
@@ -132,7 +132,6 @@ st.caption(':red[ВНИМАНИЕ! Данные, представленные н
 характер. Все совпадения с реальностью случайны.]')
 
 st.header('Период: Январь 2023')
-
 
 ## Sales in regions
 
@@ -167,7 +166,6 @@ st.dataframe(region_df_for_table.style.format({'Продажи, шт': number_st
                                                'Продажи, л': number_style}),
              hide_index=True)
 
-
 ## Sales in Kazan
 
 
@@ -191,7 +189,7 @@ if len(dfs_kazan_sales[col_name_of_kazan_product]):
     ### Chart:
 
     df_for_kazan_sales = dfs_kazan_sales[col_name_of_kazan_product]
-    st.plotly_chart(map_kazan_sales(df_for_kazan_sales, 9))
+    st.plotly_chart(map_kazan_sales(df_for_kazan_sales, 9, metric=metric_of_kazan))
 
     ### Table (top-5)
 
@@ -217,7 +215,8 @@ else:
 
 st.subheader('Продажи в близжаших магазинах (в заданной окрестности от выбранного)')
 
-col31, col32, col33 = st.columns(3)
+col31, col32 = st.columns(2)
+col41, col42 = st.columns(2)
 
 with col31:
     product_of_shop = st.selectbox('Выберите продукт:', products_lst, key=5)
@@ -225,9 +224,12 @@ with col31:
     temp_df_for_shops_around = dfs_kazan_sales[col_name_of_shop_product]
 
 with col32:
+    metric_of_shop = st.selectbox('Выберите метрику:', metrics_lst, key=6)
+
+with col41:
     net = st.selectbox('Выберите сеть:', dfs_kazan_sales[col_name_of_shop_product]['Название сети'].unique())
 
-with col33:
+with col42:
     shop_number = st.selectbox('Номер магазина в сети:',
                                temp_df_for_shops_around[temp_df_for_shops_around['Название сети'] == net]
                                ['Номер магазина в сети'].unique())
@@ -245,23 +247,24 @@ df_for_shops_around = temp_df_for_shops_around[temp_df_for_shops_around.gps.appl
     lambda x: geodesic(x, shop_coord).kilometers <= radius)]
 
 if len(temp_df_for_shops_around):
-    
+
     ### Chart
-    
-    st.plotly_chart(map_kazan_sales(df_for_shops_around, 12))
-    
+
+    st.plotly_chart(map_kazan_sales(df_for_shops_around, 12, metric=metric_of_shop))
+
     ### Table
-    
+
     shops_around_df_for_table = df_for_shops_around \
         .drop(columns=['lat', 'long', 'gps']) \
-        .sort_values('Продажи, руб с НДС', ascending=False)
-    
-    st.write(f'**Список магазинов в радиусе {radius} км в порядке убывания по количеству продаж в рублях\*:**')
+        .sort_values(metric_of_shop, ascending=False)
+
+    st.write(f'**Список магазинов в радиусе {round(radius, 2)} км в порядке убывания по указанной выше метрике\*:**')
     st.caption('\* если другой порядок не определен пользователем (по щелчку мыши на названии столбца в таблице))')
     st.dataframe(shops_around_df_for_table.style.format({'Продажи, шт': number_style,
                                                          'Продажи, руб с НДС': number_style,
                                                          'Продажи, л': number_style}),
                  hide_index=True)
+
 
 else:
     st.warning('Данный товар не был продан ни в одном из магазинов г. Казань в январе 2023 года.')
