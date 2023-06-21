@@ -10,7 +10,7 @@ st.set_page_config(page_title='Магазины и регионы')
 
 # LOADING AND CREATING DATA
 
-folder = 'C:/Users/Андрей ПК/PycharmProjects/Streamlit_tests/pages/files/'
+folder = './files/'
 
 with open(folder + 'some_goods_sales_regions.json', encoding='utf-8') as file:
     region_sales_json = json.load(file)
