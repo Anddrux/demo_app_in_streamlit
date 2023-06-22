@@ -260,7 +260,7 @@ if len(temp_df_for_shops_around):
         .sort_values(metric_of_shop, ascending=False)
 
     st.write(f'**Список магазинов в радиусе {round(radius, 2)} км в порядке убывания по указанной выше метрике\*:**')
-    st.caption('\* если другой порядок не определен пользователем (по щелчку мыши на названии столбца в таблице))')
+    st.caption('\* если другой порядок не определен пользователем (по щелчку мыши на названии столбца в таблице)')
     st.dataframe(shops_around_df_for_table.style.format({'Продажи, шт': number_style,
                                                          'Продажи, руб с НДС': number_style,
                                                          'Продажи, л': number_style}),
