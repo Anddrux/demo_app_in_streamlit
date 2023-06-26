@@ -163,33 +163,14 @@ st.plotly_chart(three_plots(met_df))
 
 st.subheader('Продажи по неделям (руб)')
 
-col21, col22 = st.columns(2)
-
-with col21:
-    second_products_lst = products_lst.copy()
-    second_products_lst.remove(product_of_page)
-    second_products_lst.insert(0, 'Нет')
-    second_product = st.selectbox('Выберите второй продукт (если необходимо):', second_products_lst)
-
-with col22:
-    third_products_lst = second_products_lst.copy()
-    third_products_lst.remove(second_product)
-    if 'Нет' not in third_products_lst:
-        third_products_lst.insert(0, 'Нет')
-    disable = False
-    if second_product == 'Нет':
-        disable = True
-    third_products = st.selectbox('Выберите третий продукт (если необходимо):', third_products_lst, disabled=disable)
+other_products_lst = products_lst.copy()
+other_products_lst.remove(product_of_page)
+other_products = st.multiselect('Выберите другие продукты для сравнения:', other_products_lst, [other_products_lst[1],
+                                                                                                other_products_lst[4]])
 
 incomplete_weeks = st.checkbox('Отобразить неполные недели')
 
-if second_product == 'Нет':
-    st.plotly_chart(many_products_scatter_line(incomplete_weeks, product_of_page))
-else:
-    if third_products == 'Нет':
-        st.plotly_chart(many_products_scatter_line(incomplete_weeks, product_of_page, second_product))
-    else:
-        st.plotly_chart(many_products_scatter_line(incomplete_weeks, product_of_page, second_product, third_products))
+st.plotly_chart(many_products_scatter_line(incomplete_weeks, product_of_page, *other_products))
 
 if incomplete_weeks:
     st.caption('Номер недели "0" отображает данные за 52 неделю согласно стандарту ISO 8601\
