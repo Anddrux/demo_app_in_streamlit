@@ -125,7 +125,7 @@ st.caption(':red[ВНИМАНИЕ! Данные, представленные н
 st.header('Период: Январь 2023')
 
 # st.success("Выберите продукт из списка ниже:")
-product_of_page = st.selectbox('Выберите продукт из списка ниже:', products_lst)
+product_of_page = st.selectbox('Выберите продукт из списка ниже:', products_lst, 1)
 col_name_of_page_product = products_dct[product_of_page]
 
 st.header(f"Продукт: {product_of_page}")
