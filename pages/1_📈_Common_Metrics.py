@@ -9,7 +9,7 @@ st.set_page_config(page_title='Общие метрики по продукту')
 
 # Loading and creating data
 
-folder = '/app/demo_app_in_streamlit/pages/files/'
+folder = '/mount/src/demo_app_in_streamlit/pages/files/'
 
 met_df = pd.read_csv(folder + 'df_for_met_and_pie.csv', index_col=0)
 delta_met_df = pd.read_csv(folder + 'delta_df_for_met_and_pie.csv', index_col=0)
